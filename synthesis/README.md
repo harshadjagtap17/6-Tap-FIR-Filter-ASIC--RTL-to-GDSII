@@ -29,12 +29,12 @@ The implementation uses three pre-adders and a shift-and-add arithmetic structur
 - **Version:** 2024.2
 - **HDL:** Verilog
 
-Directory Contents
+## Directory Contents
 
-synthesis_reports/ – Reports generated during RTL synthesis, including hardware resource utilisation and synthesis analysis.
+- **Synthesis_reports:** Reports generated during RTL synthesis, including hardware resource utilisation and synthesis analysis.
 
-timing_reports/ – Timing analysis reports containing the design's timing characteristics and constraints.
+- **Timing_reports:** Timing analysis reports containing the design's timing characteristics and constraints.
 
-Results
+## Results
 
 The reports are organised into separate directories to make synthesis and timing analysis easier to review. All reported values correspond to the actual Vivado synthesis and timing runs.
