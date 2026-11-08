@@ -1,0 +1,123 @@
+(nix:devshell-env) [nix-shell:~/ASIC/designs/fir_filter]$ vvp fir_sim.out
+----------------------------------------
+6-TAP FIR FILTER FUNCTIONAL VERIFICATION
+----------------------------------------
+
+TEST 1: ZERO INPUT
+PASS: input=0 output=0 expected=0 time=46000
+PASS: input=0 output=0 expected=0 time=56000
+PASS: input=0 output=0 expected=0 time=66000
+PASS: input=0 output=0 expected=0 time=76000
+PASS: input=0 output=0 expected=0 time=86000
+PASS: input=0 output=0 expected=0 time=96000
+PASS: input=0 output=0 expected=0 time=106000
+PASS: input=0 output=0 expected=0 time=116000
+
+TEST 2: IMPULSE RESPONSE
+PASS: input=100 output=200 expected=200 time=156000
+PASS: input=0 output=400 expected=400 time=166000
+PASS: input=0 output=600 expected=600 time=176000
+PASS: input=0 output=600 expected=600 time=186000
+PASS: input=0 output=400 expected=400 time=196000
+PASS: input=0 output=200 expected=200 time=206000
+PASS: input=0 output=0 expected=0 time=216000
+PASS: input=0 output=0 expected=0 time=226000
+
+TEST 3: CONSTANT INPUT
+PASS: input=20 output=40 expected=40 time=266000
+PASS: input=20 output=120 expected=120 time=276000
+PASS: input=20 output=240 expected=240 time=286000
+PASS: input=20 output=360 expected=360 time=296000
+PASS: input=20 output=440 expected=440 time=306000
+PASS: input=20 output=480 expected=480 time=316000
+PASS: input=20 output=480 expected=480 time=326000
+PASS: input=20 output=480 expected=480 time=336000
+PASS: input=20 output=480 expected=480 time=346000
+PASS: input=20 output=480 expected=480 time=356000
+
+TEST 4: MAXIMUM INPUT
+PASS: input=255 output=510 expected=510 time=396000
+PASS: input=255 output=1530 expected=1530 time=406000
+PASS: input=255 output=3060 expected=3060 time=416000
+PASS: input=255 output=4590 expected=4590 time=426000
+PASS: input=255 output=5610 expected=5610 time=436000
+PASS: input=255 output=6120 expected=6120 time=446000
+PASS: input=255 output=6120 expected=6120 time=456000
+PASS: input=255 output=6120 expected=6120 time=466000
+PASS: input=255 output=6120 expected=6120 time=476000
+PASS: input=255 output=6120 expected=6120 time=486000
+
+TEST 5: STEP INPUT
+PASS: input=0 output=0 expected=0 time=526000
+PASS: input=0 output=0 expected=0 time=536000
+PASS: input=0 output=0 expected=0 time=546000
+PASS: input=0 output=0 expected=0 time=556000
+PASS: input=0 output=0 expected=0 time=566000
+PASS: input=100 output=200 expected=200 time=576000
+PASS: input=100 output=600 expected=600 time=586000
+PASS: input=100 output=1200 expected=1200 time=596000
+PASS: input=100 output=1800 expected=1800 time=606000
+PASS: input=100 output=2200 expected=2200 time=616000
+PASS: input=100 output=2400 expected=2400 time=626000
+PASS: input=100 output=2400 expected=2400 time=636000
+PASS: input=100 output=2400 expected=2400 time=646000
+PASS: input=100 output=2400 expected=2400 time=656000
+PASS: input=100 output=2400 expected=2400 time=666000
+
+TEST 6: VARYING INPUT SEQUENCE
+PASS: input=20 output=40 expected=40 time=706000
+PASS: input=20 output=120 expected=120 time=716000
+PASS: input=20 output=240 expected=240 time=726000
+PASS: input=21 output=362 expected=362 time=736000
+PASS: input=22 output=448 expected=448 time=746000
+PASS: input=90 output=634 expected=634 time=756000
+PASS: input=24 output=786 expected=786 time=766000
+PASS: input=23 output=938 expected=938 time=776000
+PASS: input=22 output=950 expected=950 time=786000
+PASS: input=25 output=824 expected=824 time=796000
+PASS: input=0 output=646 expected=646 time=806000
+PASS: input=21 output=464 expected=464 time=816000
+PASS: input=22 output=412 expected=412 time=826000
+PASS: input=20 output=398 expected=398 time=836000
+
+TEST 7: RANDOM INPUT
+PASS: input=36 output=72 expected=72 time=876000
+PASS: input=129 output=402 expected=402 time=886000
+PASS: input=9 output=750 expected=750 time=896000
+PASS: input=99 output=1224 expected=1224 time=906000
+PASS: input=13 output=1394 expected=1394 time=916000
+PASS: input=141 output=1570 expected=1570 time=926000
+PASS: input=101 output=1732 expected=1732 time=936000
+PASS: input=18 output=1778 expected=1778 time=946000
+PASS: input=1 output=1776 expected=1776 time=956000
+PASS: input=13 output=1334 expected=1334 time=966000
+PASS: input=118 output=1088 expected=1088 time=976000
+PASS: input=61 output=952 expected=952 time=986000
+PASS: input=237 output=1544 expected=1544 time=996000
+PASS: input=140 output=2356 expected=2356 time=1006000
+PASS: input=249 output=3344 expected=3344 time=1016000
+PASS: input=198 output=4134 expected=4134 time=1026000
+PASS: input=197 output=4590 expected=4590 time=1036000
+PASS: input=170 output=4844 expected=4844 time=1046000
+PASS: input=229 output=4784 expected=4784 time=1056000
+PASS: input=119 output=4646 expected=4646 time=1066000
+PASS: input=18 output=4090 expected=4090 time=1076000
+PASS: input=143 output=3520 expected=3520 time=1086000
+PASS: input=242 output=3134 expected=3134 time=1096000
+PASS: input=206 output=3280 expected=3280 time=1106000
+PASS: input=232 output=3908 expected=3908 time=1116000
+PASS: input=197 output=4618 expected=4618 time=1126000
+PASS: input=92 output=4854 expected=4854 time=1136000
+PASS: input=189 output=4628 expected=4628 time=1146000
+PASS: input=45 output=3920 expected=3920 time=1156000
+PASS: input=101 output=3320 expected=3320 time=1166000
+
+----------------------------------------
+VERIFICATION SUMMARY
+----------------------------------------
+Total samples checked : 95
+PASS                  : 95
+FAIL                  : 0
+FINAL RESULT: ALL TESTS PASSED
+----------------------------------------
+fir_filter_tb.v:226: $finish called at 1166000 (1ps)
