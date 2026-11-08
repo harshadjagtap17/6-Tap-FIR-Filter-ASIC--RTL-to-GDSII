@@ -17,7 +17,7 @@ simulation/
 │
 └── waveforms/
     ├── fir_filter_waveform.png
-    └── input_vs_output.png
+    └── fir_filter_output_visualised.pdf
 ```
 
 ## Testbench
