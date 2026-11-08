@@ -1,29 +1,25 @@
-# Temporary files
+cd ~/GitHub/6-tap-fir-filter-asic
+
+cat > .gitignore <<'EOF'
+# Logs and temporary files
 *.log
 *.tmp
 *.bak
-*.swp
-
-# Vivado generated files
 *.jou
+
+# Vivado
 *.wdb
 *.str
 *.cache/
-*.hw/
-*.ip_user_files/
 *.runs/
 *.sim/
+*.hw/
+*.ip_user_files/
 
 # OpenLane intermediate files
 runs/*/tmp/
 runs/*/logs/
-runs/*/results/
-runs/*/reports/
 runs/*/objects/
-
-# Operating system
-.DS_Store
-Thumbs.db
 
 # Python
 __pycache__/
@@ -32,3 +28,8 @@ __pycache__/
 # Editors
 .vscode/
 .idea/
+
+# OS
+.DS_Store
+Thumbs.db
+EOF
