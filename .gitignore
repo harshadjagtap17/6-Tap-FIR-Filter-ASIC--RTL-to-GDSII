@@ -1,35 +1,80 @@
-cd ~/GitHub/6-tap-fir-filter-asic
-
-cat > .gitignore <<'EOF'
-# Logs and temporary files
-*.log
+# ==========================================
+# Temporary files and logs
+# ==========================================
 *.tmp
 *.bak
 *.jou
+*.swp
+*.swo
+*~
 
-# Vivado
-*.wdb
-*.str
+# Ignore root-level temporary logs only.
+# Preserve curated logs inside project evidence folders.
+ /*.log
+
+# ==========================================
+# Xilinx Vivado
+# ==========================================
+.Xil/
 *.cache/
 *.runs/
 *.sim/
 *.hw/
+*.gen/
 *.ip_user_files/
+*.wdb
+*.str
+*.pb
+*.backup
+*.xpr~
 
-# OpenLane intermediate files
-runs/*/tmp/
-runs/*/logs/
-runs/*/objects/
+# ==========================================
+# OpenLane / ASIC physical design
+# ==========================================
+# Local OpenLane run directories
+/runs/
+/results/
+/reports/
+/logs/
+/objects/
+/tmp/
 
+# Temporary tool-generated files
+*.spef
+*.sdf
+*.vcd
+*.fst
+
+# Preserve final project deliverables:
+# .gds, .lef, .def, .lib, .png and report files
+# are intentionally NOT ignored.
+
+# ==========================================
 # Python
+# ==========================================
 __pycache__/
-*.pyc
+*.py[cod]
+.Python
+.pytest_cache/
+.venv/
+venv/
 
-# Editors
+# ==========================================
+# Editors and IDEs
+# ==========================================
 .vscode/
 .idea/
+*.code-workspace
 
-# OS
+# ==========================================
+# Operating System
+# ==========================================
 .DS_Store
 Thumbs.db
-EOF
+desktop.ini
+
+# ==========================================
+# Backup and archive files
+# ==========================================
+*.old
+*.orig
