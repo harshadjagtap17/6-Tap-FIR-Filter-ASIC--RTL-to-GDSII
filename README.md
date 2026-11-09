@@ -222,7 +222,11 @@ Detailed project documentation is available in [`documentation/`](documentation/
 - **Harshad Jagtap**
 - **Suraj Jagtap**
 - **Shraddha Jadhav**
+  
+## License
 
+This project is licensed under the MIT License.
+See the [LICENSE](LICENSE) file for details.
 ## Project Objective
 
 To design and implement a multiplierless digital FIR filter and demonstrate the complete hardware development journey, from RTL architecture and functional verification to ASIC physical design and GDSII generation.
