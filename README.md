@@ -7,11 +7,11 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/HDL-Verilog-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Simulation-Vivado-orange?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Synthesis-Yosys-purple?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/ASIC%20Flow-OpenLane%202-green?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/PDK-Sky130A-red?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/HDL-Verilog-blue?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Simulation-Vivado-orange?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Synthesis-Yosys-purple?style=for-the-badge">
+  <img src="https://img.shields.io/badge/ASIC%20Flow-OpenLane%202-green?style=for-the-badge">
+  <img src="https://img.shields.io/badge/PDK-Sky130A-red?style=for-the-badge">
 </p>
 
 ---
@@ -20,11 +20,11 @@
 
 This project presents the design and ASIC implementation of a **6-tap symmetric, multiplierless FIR low-pass filter** intended for signal conditioning in UAV flight command receiver systems.
 
-The design uses a symmetric coefficient structure and shift-and-add arithmetic to reduce hardware complexity by eliminating conventional multiplier blocks.
+The design exploits coefficient symmetry and shift-and-add arithmetic to reduce hardware complexity by eliminating conventional multiplier blocks.
 
-The complete implementation covers the digital design flow, from Verilog RTL development and functional verification to synthesis, physical design, layout verification, and final GDSII generation.
+The complete implementation covers the digital design flow, from Verilog RTL development and functional verification to logic synthesis, physical design, layout generation, and final GDSII output.
 
-**Key objective:** Demonstrate a complete RTL-to-GDSII ASIC implementation using an open-source physical design flow and the Sky130A technology platform.
+**Project Objective:** Demonstrate a complete RTL-to-GDSII ASIC implementation using an open-source physical design flow and the Sky130A technology platform.
 
 ## Design Specifications
 
@@ -45,17 +45,17 @@ The complete implementation covers the digital design flow, from Verilog RTL dev
 | Technology | Sky130A PDK |
 | Layout Tool | Magic VLSI |
 
+---
+
 ## FIR Filter Architecture
 
-The filter exploits coefficient symmetry to reduce the number of arithmetic operations.
-
-The coefficient sequence is:
+The filter uses a symmetric coefficient sequence:
 
 \[
 h[n] = \{2,4,6,6,4,2\}
 \]
 
-The corresponding filter equation is:
+The corresponding FIR equation is:
 
 \[
 \begin{aligned}
@@ -64,7 +64,7 @@ y[n] ={}& 2x[n] + 4x[n-1] + 6x[n-2] \\
 \end{aligned}
 \]
 
-Using symmetry:
+By exploiting coefficient symmetry, the equation can be rewritten as:
 
 \[
 \begin{aligned}
@@ -74,13 +74,13 @@ C &= x[n-2] + x[n-3]
 \end{aligned}
 \]
 
-The final output becomes:
+Therefore:
 
 \[
-y[n] = 2A + 4B + 6C
+\boxed{y[n] = 2A + 4B + 6C}
 \]
 
-The constant multiplications are implemented using shifts and additions:
+Constant multiplication is implemented using shift-and-add operations:
 
 - \(2A = A \ll 1\)
 - \(4B = B \ll 2\)
@@ -104,11 +104,13 @@ flowchart LR
     style F fill:#dbeafe,stroke:#2563eb,color:#111827
 ```
 
+---
+
 ## RTL Design
 
-The design is implemented using modular Verilog HDL, with individual modules for arithmetic operations, delay elements, and filter integration.
+The design follows a modular Verilog HDL implementation, with dedicated modules for arithmetic operations, delay elements, and top-level filter integration.
 
-| Module | Description |
+| RTL Module | Description |
 |---|---|
 | `full_adder.v` | Single-bit full adder |
 | `rca_9bit.v` | 9-bit ripple carry adder |
@@ -119,18 +121,20 @@ The design is implemented using modular Verilog HDL, with individual modules for
 | `shift_register.v` | Input delay-line implementation |
 | `fir_filter_top.v` | Top-level FIR filter integration |
 
-The modular structure supports independent verification and simplifies integration into the ASIC implementation flow.
+The modular design supports independent verification of individual components and simplifies integration into the ASIC implementation flow.
+
+---
 
 ## Functional Verification
 
 Functional simulation was performed using **Xilinx Vivado 2024.2** with a dedicated Verilog testbench.
 
-The testbench checks the filter output against the expected FIR computation for sequential input samples.
+The testbench compares the simulated filter output against the expected FIR computation for sequential input samples.
 
 ### Simulation Waveform
 
 <p align="center">
-  <img src="assets/simulation-waveform.png" alt="Vivado FIR Filter Simulation Waveform" width="100%">
+  <img src="assets/fir_tb_waveform.png" alt="Vivado FIR Filter Testbench Waveform" width="100%">
 </p>
 
 ### Sample Simulation Results
@@ -144,40 +148,33 @@ The testbench checks the filter output against the expected FIR computation for 
 | 22 | 448 | 448 | PASS |
 | 90 | 634 | 634 | PASS |
 
-*These are selected sequential simulation observations, not independent steady-state input/output pairs.*
+*These are selected sequential simulation observations. Outputs depend on the current and previous samples stored in the FIR delay line.*
 
-### Input vs. Output Response
+### Input vs Output Response
+
+The following plot illustrates the filter's response to a varying input sequence.
 
 <p align="center">
-  <img src="assets/input-output-response.png" alt="FIR Filter Input versus Output Response" width="90%">
+  <img src="assets/varying%20input%20vs%20output.png" alt="FIR Filter Varying Input versus Output Response" width="90%">
 </p>
+
+---
 
 ## ASIC Physical Implementation
 
-The RTL design was taken through an ASIC physical implementation flow using **OpenLane 2** and the **Sky130A PDK**.
-
-The implementation flow includes:
-
-1. RTL preparation and design configuration
-2. Logic synthesis using Yosys
-3. Floorplanning
-4. Placement
-5. Clock-tree and routing stages as configured
-6. Physical verification
-7. Parasitic extraction and final design preparation
-8. GDSII generation
+The verified RTL design was taken through an ASIC physical implementation flow using **OpenLane 2** and the **Sky130A PDK**.
 
 ### Physical Design Flow
 
 ```mermaid
 flowchart TD
-    A["Verilog RTL"] --> B["Logic Synthesis"]
+    A["Verilog RTL"] --> B["Logic Synthesis - Yosys"]
     B --> C["Floorplanning"]
     C --> D["Placement"]
     D --> E["Routing"]
     E --> F["Physical Verification"]
     F --> G["Parasitic Extraction"]
-    G --> H["Final GDSII"]
+    G --> H["GDSII Generation"]
 
     style A fill:#dbeafe,stroke:#2563eb,color:#111827
     style H fill:#dcfce7,stroke:#16a34a,color:#111827
@@ -185,15 +182,19 @@ flowchart TD
 
 ### Final ASIC Layout
 
+The final physical layout was generated using the Sky130A technology platform and can be viewed using Magic VLSI.
+
 <p align="center">
-  <img src="assets/magic-layout.png" alt="Final FIR Filter ASIC Layout in Magic VLSI" width="100%">
+  <img src="assets/Magic_layout.jpeg" alt="Final FIR Filter ASIC Layout in Magic VLSI" width="100%">
 </p>
 
 ### GDSII Deliverable
 
-The generated layout file is available in the repository:
+The generated GDSII layout is available in the repository:
 
-**[`fir_filter_top.gds`](physical_design/gds/fir_filter_top.gds)**
+**[View / Download fir_filter_top.gds](physical_design/gds/fir_filter_top.gds)**
+
+---
 
 ## Tools and Technologies
 
@@ -202,10 +203,12 @@ The generated layout file is available in the repository:
 | Verilog HDL | RTL design |
 | Xilinx Vivado 2024.2 | Functional simulation |
 | Yosys | Logic synthesis |
-| OpenLane 2 | ASIC physical design flow |
+| OpenLane 2 | ASIC physical design |
 | Sky130A PDK | Semiconductor technology platform |
-| Magic VLSI | Layout viewing and physical design |
+| Magic VLSI | Layout generation and viewing |
 | Ubuntu / WSL | Development environment |
+
+---
 
 ## Repository Structure
 
@@ -249,14 +252,16 @@ FIR-Filter-ASIC/
 │
 ├── assets/
 │   ├── readme-banner.png
-│   ├── simulation-waveform.png
-│   ├── input-output-response.png
-│   └── magic-layout.png
+│   ├── fir_tb_waveform.png
+│   ├── varying input vs output.png
+│   └── Magic_layout.jpeg
 │
 ├── README.md
 ├── LICENSE
 └── .gitignore
 ```
+
+---
 
 ## Project Highlights
 
@@ -265,7 +270,7 @@ FIR-Filter-ASIC/
 - Developed modular Verilog RTL with dedicated arithmetic components.
 - Performed functional verification using a custom testbench in Vivado.
 - Implemented the ASIC physical design flow using OpenLane 2 and Sky130A.
-- Generated a final GDSII layout deliverable.
+- Generated the final GDSII layout deliverable.
 
 ## Contributors
 
