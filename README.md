@@ -49,52 +49,80 @@ The complete implementation covers the digital design flow, from Verilog RTL dev
 
 ## FIR Filter Architecture
 
-The filter uses a symmetric coefficient sequence:
+The proposed design implements a **6-tap symmetric Finite Impulse Response (FIR) low-pass filter** using coefficient symmetry and multiplierless shift-and-add arithmetic.
 
-\[
-h[n] = \{2,4,6,6,4,2\}
-\]
+### 1. Filter Coefficients
 
-The corresponding FIR equation is:
+The filter uses the following symmetric coefficient sequence:
 
-\[
-\begin{aligned}
-y[n] ={}& 2x[n] + 4x[n-1] + 6x[n-2] \\
-        &+ 6x[n-3] + 4x[n-4] + 2x[n-5]
-\end{aligned}
-\]
+**h[n] = {2, 4, 6, 6, 4, 2}**
 
-By exploiting coefficient symmetry, the equation can be rewritten as:
+Since the coefficients are symmetric:
 
-\[
-\begin{aligned}
-A &= x[n] + x[n-5] \\
-B &= x[n-1] + x[n-4] \\
-C &= x[n-2] + x[n-3]
-\end{aligned}
-\]
+- h[0] = h[5] = 2
+- h[1] = h[4] = 4
+- h[2] = h[3] = 6
 
-Therefore:
+This symmetry allows input samples to be paired before multiplication, reducing the number of arithmetic operations.
 
-\[
-\boxed{y[n] = 2A + 4B + 6C}
-\]
+### 2. FIR Difference Equation
 
-Constant multiplication is implemented using shift-and-add operations:
+The conventional 6-tap FIR equation is:
 
-- \(2A = A \ll 1\)
-- \(4B = B \ll 2\)
-- \(6C = (C \ll 2) + (C \ll 1)\)
+```text
+y[n] = 2x[n]   + 4x[n-1] + 6x[n-2]
+     + 6x[n-3] + 4x[n-4] + 2x[n-5]
+```
 
-### Architecture Block Diagram
+By grouping samples with identical coefficients, the equation becomes:
+
+```text
+A = x[n]   + x[n-5]
+B = x[n-1] + x[n-4]
+C = x[n-2] + x[n-3]
+```
+
+Therefore, the optimized filter equation is:
+
+```text
+y[n] = 2A + 4B + 6C
+```
+
+### 3. Multiplierless Shift-and-Add Implementation
+
+Instead of using conventional hardware multipliers, constant multiplication is implemented using bit-shift operations and addition.
+
+| Operation | Hardware Implementation |
+|---|---|
+| 2A | `A << 1` |
+| 4B | `B << 2` |
+| 6C | `(C << 2) + (C << 1)` |
+
+The final output is calculated as:
+
+```text
+y[n] = (A << 1) + (B << 2) + (C << 2) + (C << 1)
+```
+
+This approach eliminates dedicated multiplier blocks and uses simpler shift-and-add arithmetic.
+
+### 4. Hardware Architecture
+
+The RTL architecture consists of the following processing stages:
+
+1. **Input Delay Line:** Stores the current and previous input samples.
+2. **Symmetric Pre-Adders:** Combines sample pairs having identical filter coefficients.
+3. **Shift-and-Add Arithmetic:** Implements constant multiplication using bit shifts and additions.
+4. **RCA Adder Stages:** Combines the partial products to generate the final filter output.
+5. **Output Stage:** Produces the 13-bit filtered output.
 
 ```mermaid
 flowchart LR
-    A["8-bit Input x[n]"] --> B["Delay Line / Registers"]
-    B --> C["Symmetric Pre-Adders"]
-    C --> D["Shift-and-Add Arithmetic"]
-    D --> E["RCA Adder Stages"]
-    E --> F["13-bit Output y[n]"]
+    A["8-bit Input x[n]"] --> B["Delay Line<br/>5 Delay Stages"]
+    B --> C["Symmetric Pre-Adders<br/>A, B, C"]
+    C --> D["Shift-and-Add<br/>2A, 4B, 6C"]
+    D --> E["RCA Adder<br/>Stages"]
+    E --> F["13-bit Output<br/>y[n]"]
 
     style A fill:#dbeafe,stroke:#2563eb,color:#111827
     style B fill:#e0e7ff,stroke:#4f46e5,color:#111827
@@ -103,6 +131,12 @@ flowchart LR
     style E fill:#dcfce7,stroke:#16a34a,color:#111827
     style F fill:#dbeafe,stroke:#2563eb,color:#111827
 ```
+
+### 5. Design Advantage
+
+The symmetric FIR architecture reduces six coefficient multiplications to three pre-addition operations followed by shift-and-add arithmetic.
+
+This provides a multiplierless implementation with a modular datapath suitable for ASIC synthesis and physical implementation.
 
 ---
 
